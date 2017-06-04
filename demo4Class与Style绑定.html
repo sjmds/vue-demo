@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>观察watchers</title>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+
+</head>
+<style>
+div{margin:15px 0;}
+.static{color:#333;}
+.active{color:#00f;}
+.text-danger{color:#f00;}
+</style>
+<body>
+<div id="example">
+  <div>example</div>
+  <div class="static"
+    :class="{ active: isActive, 'text-danger': hasError }">example example
+  </div>
+  <div class="static"
+    :class="{ active: isActive, 'text-danger': hasError1 }"
+    @click="change">
+    example example example
+  </div>
+  <div :class="classObject">classObject</div>
+</div>
+<script>
+var vm = new Vue({
+  el: '#example',
+  data: {
+    isActive: true,
+    hasError: false,
+    hasError1: true,
+    classObject: {
+       active: true,
+       error: null
+    }
+  },
+ computed: {
+    classObject: function () {
+      return {
+        active: this.isActive && !this.error,
+        'text-danger': this.error && this.error.type === 'fatal',
+      }
+    }
+  },
+  methods: {
+    change:function(){
+      this.hasError1=!this.hasError1;
+    }
+  }
+})
+</script>
+
+</body>
+</html>

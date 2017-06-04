@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>购物车</title>
+<link rel="stylesheet" href="/vuelx/vue/dist/bootstrap.min.css">
+</head>
+
+<body>
+<div id="app" class="container">
+  <h3>动脑学院前端课程</h3>
+  <table class="table table-bordered">
+    <tr>
+      <th>ID</th>
+      <th>订单编号</th>
+      <th>产品名称</th>
+      <th>购买数量</th>
+      <th>产品单价</th>
+      <th>小计</th>
+      <th>操作</th>
+    </tr>
+    <tr v-for="(item,index) in message">
+      <td>{{index+1}}</td>
+      <td>{{item.id}}</td>
+      <td>{{item.name}}</td>
+      <td>
+        <button type="button" class="btn btn-primary" @click="substact(index)">-</button>
+        <input type="text" v-model="item.amount"/>
+        <button type="button" class="btn btn-primary" @click="increase(index)">+</button>
+      </td>
+      <td>{{item.price}}</td>
+      <td>{{item.price*item.amount}}</td>
+      <td>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#layer" @click="nowIndex=index">移除</button>
+      </td>
+    </tr>
+    <tr v-if="message.length!==0">
+      <td>总购买价</td>
+      <td colspan="5">{{animateNum}}</td>
+      <td>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#layer" @click="nowIndex=-2">清空购物车</button>
+      </td>
+    </tr>
+  </table>
+  <p v-if="message.length===0">您的购物车现在还没有商品</p>
+  <div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+          <h4 class="modal-title">确认删除{{nowIndex==-2?"全部":nowIndex+1}}吗？</h4>
+          <div class="modal-body text-right">
+            <button class="btn btn-sm btn-primary" data-dismiss="modal">取消</button>
+            <button class="btn btn-sm btn-danger" data-dismiss="modal" @click="remove(nowIndex)">确认</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="/vuelx/vue/dist/jquery-1.11.3.min.js"></script>
+<script src="/vuelx/vue/dist/bootstrap.min.js"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+var vm=new Vue({
+  el:"#app",
+  data:{
+    animateNum:0,//默认值
+    nowIndex:-10,
+    message:[
+      {
+        id:"DN001",
+        name:"大前端全栈开发",
+        amount:2,
+        price:5000
+      },
+      {
+        id:"DN002",
+        name:"大前端全栈开发",
+        amount:2,
+        price:6000
+      },
+      {
+        id:"DN003",
+        name:"大前端全栈开发",
+        amount:2,
+        price:3000
+      },
+      {
+        id:"DN004",
+        name:"大前端全栈开发",
+        amount:2,
+        price:6000
+      }
+    ]
+  },
+  computed:{
+    toCount:function(){
+      this.animateNum=0;
+      this.message.forEach((mess)=>this.animateNum+=parseInt(mess.price*mess.amount));
+      return this.animateNum;
+    }
+  },
+  watch:{
+    toCount:function(newValue){
+      this.animateNum=newValue;
+    }
+  },
+  mounted:{
+    
+  },
+  methods:{
+    substact:function(index){
+      if(this.message[index].amount<=1){
+        if(confirm("你确定删除该商品吗？")){
+          this.message.splice(index,1);
+        }else{
+          return;
+        }
+      }
+      this.message[index].amount--;
+    },
+    increase:function(index){
+      this.message[index].amount++;
+    },
+    remove:function(n){
+      if(n==-2){
+        this.message=[];
+      }else{
+        this.message.splice(n,1);
+      } 
+    }
+  }
+});
+</script>
+</body>
+</html>

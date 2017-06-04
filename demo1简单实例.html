@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>简单实例</title>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+
+</head>
+<style>
+div{margin:15px 0;}
+</style>
+<body>
+<div id="app">
+  {{ message }}
+</div>
+<script>
+var app = new Vue({
+	el: '#app',
+	data: {
+		message: 'Hello Vue!'
+	}
+})
+</script>
+
+<div id="app-2">
+  <span :title="message">
+    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+</div>
+<script>
+var app2 = new Vue({
+  el: '#app-2',
+  data: {
+    message: '页面加载于 ' + new Date().toLocaleString()
+  }
+})
+</script>
+<div id="app-3">
+  <p v-if="seen">现在你看到我了</p>
+</div>
+<script>
+var app3 = new Vue({
+  el: '#app-3',
+  data: {
+    seen: true
+  }
+})
+</script>
+<div id="app-4">
+  <ul>
+    <li v-for="(todo,index) in todos">
+      {{index+1}} {{todo.text}}
+    </li>
+  </ul>
+</div>
+<script>
+var app4 = new Vue({
+  el: '#app-4',
+  data: {
+    todos: [
+      { text: '学习 JavaScript' },
+      { text: '学习 Vue' },
+      { text: '整个牛项目' }
+    ]
+  }
+})
+</script>
+<p>注意在 reverseMessage 方法中，我们更新了应用的状态，但没有触碰 DOM——所有的 DOM 操作都由 Vue 来处理，你编写的代码只需要关注底层逻辑。</p>
+<div id="app-5">
+  <p>{{ message }}</p>
+  <button v-on:click="reverseMessage">逆转消息</button>
+</div>
+
+<script>
+var app5 = new Vue({
+  el: '#app-5',
+  data: {
+    message: 'Hello Vue.js!'
+  },
+  methods: {
+    reverseMessage: function () {
+      this.message = this.message.split('').reverse().join('')
+    }
+  }
+})
+</script>
+<p>提供了 v-model 指令，它能轻松实现表单输入和应用状态之间的双向绑定。</p>
+<div id="app-6">
+  <p>{{ message }}</p>
+  <input v-model="message">
+</div>
+
+<script>
+var app6 = new Vue({
+  el: '#app-6',
+  data: {
+    message: 'Hello Vue!'
+  }
+})
+</script>
+
+<p>在 Vue 中注册组件，我们可以使用 v-bind 指令将待办项传到每一个重复的组件中：</p>
+<div id="app-7">
+  <ol>
+    <!-- 现在我们为每个todo-item提供待办项对象    -->
+    <!-- 待办项对象是变量，即其内容可以是动态的 -->
+    <todo-item v-for="item in groceryList" v-bind:todo="item"></todo-item>
+  </ol>
+</div>
+<script>
+Vue.component('todo-item', {
+  props: ['todo'],
+  template: '<li>{{ todo.text }}</li>'
+})
+var app7 = new Vue({
+  el: '#app-7',
+  data: {
+    groceryList: [
+      { text: '蔬菜' },
+      { text: '奶酪' },
+      { text: '随便其他什么人吃的东西' }
+    ]
+  }
+})
+</script>
+<div>
+<pre>
+过滤器函数总接受表达式的值作为第一个参数。
+new Vue({
+  // ...
+  filters: {
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    }
+  }
+})	
+</pre>
+
+</div>
+</body>
+</html>
